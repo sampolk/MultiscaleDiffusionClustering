@@ -1,5 +1,6 @@
 This toolbox allows the implementation of the following diffusion-based 
-clustering algorithms:
+clustering algorithms on synthetick and real datasets included in the 
+repository:
 
  -  Learning by Unsupervised Nonlinear Diffusion (LUND)
  -  Multiscale Learning by Unsupervised Nonlinear Diffusion (M-LUND)
@@ -49,4 +50,4 @@ and use it in any publications, please cite the following papers:
 
 Please write with any questions: samuel.polk@tufts.edu
 
-(c) Copyright Sam L. Polk, Tufts University, 2020.
+(c) Copyright Sam L. Polk, Tufts University, 2021. 
