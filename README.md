@@ -6,20 +6,6 @@ clustering algorithms:
  -  Spatially Regularized Diffusion Learning (SRDL)
  -  Multiscale Spatially Regularized Diffusion Learning (M-SRDL)
 
-The following package is needed to compare M-LUND against MMS Clustering
-
-   - GraphBasedClustering: https://github.com/barahona-research-group/GraphBasedClustering
-
-All benchmark datasets were obtained from the UCI Machine Learning 
-Repository: 
-
-   - https://archive.ics.uci.edu/ml/index.php
-
-The real HSI (Salinas A) are from the 2000 IEEE Data Fusion Contest data. 
-This data ispublically available via IEEE: 
-
-   - http://www.ehu.eus/ccwintco/index.php?title=Hyperspectral_Remote_Sensing_Scenes
-
 This package can be used to generate experiments in the following articles:
 
    - Murphy, James M and Polk, Sam L., 2021. A Multiscale Environment for
@@ -35,6 +21,16 @@ in the manuscript above:
    - Table3.m generates Table 3, in which comparisons of M-LUND against 
      MMS, HSC, and SLC on benchmark datesets are provided. 
    - M_SRDL_demo.m compares M-SRDL against M-LUND on the Salinas A HSI.
+   
+All benchmark datasets were obtained from the UCI Machine Learning 
+Repository: 
+
+   - https://archive.ics.uci.edu/ml/index.php
+
+The real HSI (Salinas A) are from the 2000 IEEE Data Fusion Contest data. 
+This data ispublically available via IEEE: 
+
+   - http://www.ehu.eus/ccwintco/index.php?title=Hyperspectral_Remote_Sensing_Scenes
 
 Users are free to modify this toolbox as they wish. If you find it useful
 and use it in any publications, please cite the following papers:
