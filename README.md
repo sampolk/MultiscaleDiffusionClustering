@@ -39,9 +39,9 @@ and use it in any publications, please cite the following papers:
    - Maggioni, M., J.M. Murphy. Learning by Unsupervised Nonlinear 
      Diffusion. Journal of Machine Learning Research, 20(160), pp. 1-56. 
      2019.
-   - Murphy, J.M., Maggioni, M. Unsupervised Clustering and Active Learning 
-     of Hyperspectral Images with Nonlinear Diffusion. IEEE Transactions on 
-     Geoscience and Remote Sensing, 57(3), pp. 1829-1845. 2019.
+   - Murphy, James M., and Mauro Maggioni. "Spectral-spatial diffusion 
+     geometry for hyperspectral image clustering." IEEE Geoscience and 
+     Remote Sensing Letters (2019).
    - Murphy, James M and Polk, Sam L., 2020. A Multiscale Environment for
      Learning By Diffusion. arXiv preprint arXiv: XXXXXXX.
    - Polk, Sam L. and Murphy James M., 2021. Multiscale Clustering of 
