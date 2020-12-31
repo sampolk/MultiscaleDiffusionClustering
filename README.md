@@ -11,9 +11,8 @@ This package can be used to generate experiments in the following articles:
 
    - Murphy, James M and Polk, Sam L., 2021. A Multiscale Environment for
      Learning By Diffusion. arXiv preprint arXiv: XXXXXXX.
-   - Polk, Sam L. and Murphy James M., 2021. Multiscale Clustering of 
-     Hyperspectral and Spectral-Spatial Diffusion Geometry. arXiv preprint 
-     arXiv: XXXXXXX.
+   - Polk, Sam L. and Murphy James M., 2021. Multiscale Spectral-Spatial 
+     Diffusion Geometry\\ for Hyperspectral Image Clustering. (In Review)
 
 The following scripts (in the Experiments folder) generate the experiments 
 in the manuscript above:
@@ -44,9 +43,8 @@ and use it in any publications, please cite the following papers:
      Remote Sensing Letters (2019).
    - Murphy, James M and Polk, Sam L., 2020. A Multiscale Environment for
      Learning By Diffusion. arXiv preprint arXiv: XXXXXXX.
-   - Polk, Sam L. and Murphy James M., 2021. Multiscale Clustering of 
-     Hyperspectral and Spectral-Spatial Diffusion Geometry. arXiv preprint 
-     arXiv: XXXXXXX.
+   - Polk, Sam L. and Murphy James M., 2021. Multiscale Spectral-Spatial 
+     Diffusion Geometry for Hyperspectral Image Clustering. (In Review)
 
 Please write with any questions: samuel.polk@tufts.edu
 
