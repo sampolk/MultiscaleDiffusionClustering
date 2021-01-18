@@ -22,8 +22,9 @@ experiments:
      MMS, HSC, and SLC on benchmark datesets are provided. 
    - M_SRDL_demo.m compares M-SRDL against M-LUND on the Salinas A HSI.
    
-All benchmark datasets were obtained from the UCI Machine Learning 
-Repository: 
+All necessary datasets are contained in this repository, so no additional 
+data downloads are necessary. All benchmark datasets were obtained from 
+the UCI Machine Learning Repository: 
 
    - https://archive.ics.uci.edu/ml/index.php
 
@@ -32,8 +33,15 @@ This data is publically available via IEEE:
 
    - http://www.ehu.eus/ccwintco/index.php?title=Hyperspectral_Remote_Sensing_Scenes
 
-Users are free to modify this toolbox as they wish. If you find it useful
-and use it in any publications, please cite the following papers:
+To run comparisons against MMS clustering, the following toolboxes, written 
+by Zhijing Liu and Mauricio Barahona, must be added to one's path:
+
+   - https://github.com/barahona-research-group/GraphBasedClustering
+   - https://wwwf.imperial.ac.uk/~mpbara/Partition_Stability/
+
+Users are free to modify the Multiscale Diffusion Clustering toolbox as they 
+wish. If you find it useful and use it in any publications, please cite the 
+following papers:
 
    - Maggioni, M., J.M. Murphy. Learning by Unsupervised Nonlinear 
      Diffusion. Journal of Machine Learning Research, 20(160), pp. 1-56. 
