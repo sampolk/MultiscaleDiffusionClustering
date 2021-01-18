@@ -14,8 +14,8 @@ This package can be used to generate experiments in the following articles:
    - Polk, Sam L. and Murphy James M., 2021. Multiscale Spectral-Spatial 
      Diffusion Geometry\\ for Hyperspectral Image Clustering. (In Review)
 
-The following scripts (in the Experiments folder) generate the experiments 
-in the manuscript above:
+The following scripts (in the Experiments folder) generate the relevant 
+experiments:
 
    - M_LUND_demo.m implements M_LUND on synthetic data and Salinas A.
    - Benchmark.m generates Table 3, in which comparisons of M-LUND against 
