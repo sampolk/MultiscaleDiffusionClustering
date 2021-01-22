@@ -28,7 +28,7 @@ To run comparisons against MMS clustering, the following toolboxes, written by Z
    - https://github.com/barahona-research-group/GraphBasedClustering
    - https://wwwf.imperial.ac.uk/~mpbara/Partition_Stability/
 
-Users are free to modify the Multiscale Diffusion Clustering toolbox as they wish. If you find it useful and use it in any publications, please cite the following papers:
+Users are free to modify the Multiscale Diffusion Clustering toolbox as they wish. If you find it useful or use it in any publications, please cite the following papers:
 
    - Maggioni, Mauro, and James M. Murphy. "Learning by Unsupervised Nonlinear Diffusion." Journal of Machine Learning Research 20.160 (2019): 1-56.
    - Murphy, James M., and Mauro Maggioni. "Spectral-spatial diffusion geometry for hyperspectral image clustering." IEEE Geoscience and Remote Sensing Letters (2019).
