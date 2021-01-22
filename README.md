@@ -12,9 +12,8 @@ This package can be used to generate experiments in the following articles:
 
 The following scripts (in the Experiments folder) generate the relevant experiments:
 
-   - M_LUND_demo.m implements M_LUND on synthetic data and Salinas A.
-   - Benchmark.m generates Table 3, in which comparisons of M-LUND against MMS, HSC, and SLC on benchmark datesets are provided. 
-   - M_SRDL_demo.m compares M-SRDL against M-LUND on the Salinas A HSI.
+   - M_LUND_demo.m implements M_LUND on synthetic data and the Salinas A hyperspectral image.
+   - M_SRDL_demo.m compares M-SRDL against M-LUND on the Salinas A hyperspectral image.
    
 All necessary datasets are contained in this repository, so no additional data downloads are necessary. All benchmark datasets were obtained from the UCI Machine Learning Repository: 
 
