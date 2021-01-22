@@ -1,4 +1,4 @@
-This toolbox allows the implementation of the following diffusion-based clustering algorithms on synthetick and real datasets included in the repository:
+This toolbox allows the implementation of the following diffusion-based clustering algorithms on synthetic and real datasets included in the repository:
 
  -  Learning by Unsupervised Nonlinear Diffusion (LUND)
  -  Multiscale Learning by Unsupervised Nonlinear Diffusion (M-LUND)
