@@ -1,11 +1,13 @@
-function z = nmi(x, y)
+function [nmi, MI, Hx, Hy] = nmi(x, y)
 % Compute normalized mutual information I(x,y)/sqrt(H(x)*H(y)) of two discrete variables x and y.
 % Input:
 %   x, y: two integer vector of the same length 
 % Ouput:
 %   z: normalized mutual information z=I(x,y)/sqrt(H(x)*H(y))
 % Written by Mo Chen (sth4nth@gmail.com).
+
 assert(numel(x) == numel(y));
+
 n = numel(x);
 x = reshape(x,1,n);
 y = reshape(y,1,n);
@@ -27,5 +29,5 @@ Hy = -dot(Py,log2(Py));
 % mutual information
 MI = Hx + Hy - Hxy;
 % normalized mutual information
-z = sqrt((MI/Hx)*(MI/Hy));
-z = max(0,z);
+nmi = sqrt((MI/Hx)*(MI/Hy));
+nmi = max(0,nmi);

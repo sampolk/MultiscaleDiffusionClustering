@@ -21,14 +21,9 @@ end
 D=sort(D);
 
 if NN<n
-    parfor l=1:n
-        p(l)=sum(exp(-(D(1:NN+1,l).^2)./(sigma0^2)));
-    end
-    
+    p = sum(exp(-(D(1:NN+1,:).^2)./(sigma0^2)))';
 else
-    parfor l=1:n
-        p(l)=sum(exp(-(D(1:n,l).^2)./(sigma0^2)));
-    end
+    p = sum(exp(-(D.^2)./(sigma0^2)))';
 end
 p=p./sum(p);
     

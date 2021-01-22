@@ -30,8 +30,7 @@ Inputs: X:                      Data matrix.
                                 'extract_graph.m' (Optional).
         p:                      Kernel Density Estimator (Optional).
 
-Output: Clusterings structure with the following fields:
-
+Output: 
             - C:                n x 1 vector storing the LUND clustering 
                                 of X at time t.
             - K:                Scalar, number of clusters in C.
@@ -41,12 +40,6 @@ Output: Clusterings structure with the following fields:
 © 2021 Sam L Polk, Tufts University. 
 email: samuel.polk@tufts.edu
 %}
-if nargin == 2
-    G = extract_graph(X, Hyperparameters);
-    p = KDE(X, Hyperparameters);
-elseif nargin == 3
-    p = KDE(X, Hyperparameters);
-end    
 
 n = length(X);
 C = zeros(n,1);
@@ -59,15 +52,27 @@ end
 
 % Calculate pairwise diffusion distance at time t between points in X
 DiffusionDistance = squareform(pdist(real(DiffusionMap)));
-
+    
 % compute rho_t(x), stored as rt
 rt = zeros(n,1);
+correct_idx = [];
 for i=1:n
     if ~(p(i)==max(p))
-        rt(i)=min(DiffusionDistance(p>p(i),i));     
+        temp = min(DiffusionDistance(i,p>p(i)));
+        if temp>0 
+            rt(i) = temp;
+        else % Rounded to 0.
+            rt(i) = 0;
+            correct_idx = [correct_idx; i];
+        end
     else
-        rt(i)=max(DiffusionDistance(i,:)); 
+        rt(i) = max(DiffusionDistance(i,:));
     end
+end
+if sum(rt == 0) < n
+    rt(correct_idx) = min(rt(rt>0));
+else
+    rt = ones(n,1)./n;
 end
 
 % Extract Dt(x) and sort in descending order
@@ -78,13 +83,13 @@ Dt = rt.*p;
 if nargin == 5
     K = K_known;
 else
-    [~, K] = max(Dt(m_sorting(1:n-1))./Dt(m_sorting(2:n)));
+    Sequence = Dt(m_sorting(1:n-1))./Dt(m_sorting(2:n));
+    [~, K] = max(Sequence);
 end
 
 if K == 1
     C = ones(n,1);
 else
-
     % Label modes
     C(m_sorting(1:K)) = 1:K;
 
@@ -96,7 +101,11 @@ else
         if C(i)==0 % unlabeled point
             candidates = find(and(p>=p(i), C>0)); % Labeled points of higher density. cannot include xi. 
             [~,temp_idx] = min(DiffusionDistance(i, candidates));
+            if isempty(temp_idx)
+                disp([])
+            end
             C(i) = C(candidates(temp_idx));
+            
         end
     end
 end

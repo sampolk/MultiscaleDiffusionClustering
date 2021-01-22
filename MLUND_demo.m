@@ -1,30 +1,36 @@
 %%
-
 profile off;
 profile on;
 
 %% Choose the dataset
 
-prompt = 'Which dataset? \n 1) 3D Gaussians \n 2) 2D Nonlinear \n 3) 2D Bottleneck \n 4) Salinas A HSI';
+prompt = 'Which dataset? \n 1) 3D Gaussians \n 2) 2D Nonlinear \n 3) 2D Bottleneck \n 4) Salinas A HSI\n';
 DataSelected = input(prompt);
 
 if DataSelected == 1
     
-    [X,Y] = gaussian_sample(1,3,1000,1000);
+    disp('Finding suitable sample...')
+    [X,Y] = gaussian_sample(1,3,1000,1000,100);
     data_name = 'Gaussians';
-    load('gaussian-HP.mat')
+    load('gaussians-HP.mat')
+    disp('Dataset generated')
 
 elseif DataSelected ==2
     
-    [X,Y] = nonlinear_sample(0.2, 1.2, 4, 180, 1200, 4000);
+    disp('Finding suitable sample...')
+    [X,Y] = nonlinear_sample(0.2, 1.2, 4, 180, 1200, 4000, 100);
     data_name = 'Nonlinear';
     load('nonlinear-HP.mat')
+    disp('Dataset generated')
     
 elseif DataSelected == 3 
     
-    [X,Y] = bottleneck_sample(1500, 1500, 0.35,  1, 5, 12);
+    disp('Finding suitable sample...') 
+    [X,Y] = bottleneck_sample(0.35,  1, 5, 12, 1000, 1000, 100);
+
     data_name = 'Bottleneck';
     load('bottleneck-HP.mat')
+    disp('Dataset generated')
     
 elseif DataSelected == 4
     
@@ -38,7 +44,7 @@ end
 
 %% Choose whether to save results
 
-prompt = 'Should we save everything? \n 1) Yes \n 2) No';
+prompt = 'Should we save everything? \n 1) Yes \n 2) No\n ';
 SaveSelected = input(prompt);
 
 if SaveSelected == 1
@@ -55,7 +61,7 @@ end
 
 %% Choose whether to plot results
 
-prompt = 'Should we plot everything? \n 1) Yes \n 2) No';
+prompt = 'Should we plot everything? \n 1) Yes \n 2) No\n';
 PlotSelected = input(prompt);
 
 if PlotSelected == 1
@@ -63,7 +69,7 @@ if PlotSelected == 1
     plot_on = 1;
     
     % Choose whether to plot stochastic complements
-    prompt = 'Should we plot the intervals? These are computationally expensive. \n 1) Yes \n 2) No';
+    prompt = 'Should we plot the intervals? \nStochastic Complementation is computationally expensive. \n 1) Yes \n 2) No\n';
     PlotSelected = input(prompt);
 
     if PlotSelected == 1

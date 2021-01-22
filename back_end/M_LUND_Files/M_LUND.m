@@ -1,7 +1,7 @@
 function Clusterings = M_LUND(X, Hyperparameters, G, p)
 %{
  - This function produces a structure with multiscale clusterings produced
-   with the M-SRDL algorithm, presented in the following paper. 
+   with the M-LUND algorithm, presented in the following paper. 
 
         - Murphy, James M and Polk, Sam L., 2021. A Multiscale Environment 
           for Learning By Diffusion. (In Preparation)
@@ -76,7 +76,7 @@ if isreal(T)
     Kt = zeros(T+2,1);
     Dt = zeros(n,T+2);
     parfor i = 1:T+2
-        [Ct(:,i),Kt(i), Dt(:,i)] = LearningbyUnsupervisedNonlinearDiffusion(X, timesamples(i), G, p);
+        [Ct(:,i), Kt(i), Dt(:,i)] = LearningbyUnsupervisedNonlinearDiffusion(X, timesamples(i), G, p);
     end
 
     % ============================ VI analysis ============================
@@ -87,8 +87,8 @@ if isreal(T)
 
     if n_J > 0 % There is a nontrivial clustering of X.
         notJ = setxor((1:T+2), J);
-        for i = 1:n_J
-            parfor j = 1:n_J
+        parfor i = 1:n_J
+            for j = 1:n_J
                 V(i,j) = VI(Ct(:,J(i)), Ct(:,J(j)));
             end
         end

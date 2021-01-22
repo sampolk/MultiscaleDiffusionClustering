@@ -103,44 +103,19 @@ if isfield(Hyperparameters, 'SpatialParams')
     end
 
 else
-    % Case where there is no spatial regularization. So, standard we build
-    % a standard KNN graph
-    
+    % Case where there is no spatial regularization. So, we build a standard KNN graph
+        
     % Create weight matrix W, degree matrix D, and transition matrix P
     W = zeros(n);
     P = zeros(n);
     D = zeros(n);
     for i = 1:n    
-        [D_sorted, sorting] = mink(Dist(i,:), NN+1);
+        [D_sorted, sorting] = mink(Dist(i,:), NN+1); 
         W(i,sorting(2:end)) = exp(-(D_sorted(2:end).^2)./(sigma^2));
         D(i,i) = sum(W(i,:));
         P(i,sorting(2:end)) =  W(i,sorting(2:end))./D(i,i);
     end
 end
-
-% % Ensure directed graph in W. 
-% for i = 1:n
-%     for j = i+1:n
-%         if ~(W(i,j) == W(j,i))
-%             if W(i,j) >0 && W(j,i) == 0
-%                 W(j,i) = W(i,j);
-%             elseif W(j,i) >0 && W(i,j) == 0
-%                 W(i,j) = W(j,i);
-%             end
-%         end
-%     end
-% end
-% 
-% % Create degree matrix D and transition matrix P
-% P = zeros(n);
-% D = zeros(n);
-% for i = 1:n
-%     support = find(W(i,:)>0);
-%     D(i,i) = sum(W(i,support));
-%     P(i,support) =  W(i,support)./D(i,i);
-%     P(i,i) = 0; % Forces transitions
-% end
-
 
 % Calculate pi, stationary distribution
 pi = diag(D)./sum(diag(D));
@@ -155,12 +130,12 @@ try
         % If the number of eigenvalues is specified, choose that.
         n_eigs = Hyperparameters.NEigs;
     else
-        % Otherwise, use the maximizer of the eigengap.
+        % Otherwise, use the maximizer of the eigengap of P.
         [~,n_eigs] = max( abs(diff(EigenVals)));
         
-        % Take care of fringe cases.
-        if n_eigs <3 
-            n_eigs = 3;
+        % Take care of fringe cases where we don't gather enough eigenvectors
+        if n_eigs <5
+            n_eigs = 5;
         end
     end
     EigenVecs = real(EigenVecs(:,idx(1:n_eigs)));
