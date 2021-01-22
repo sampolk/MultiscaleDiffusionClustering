@@ -19,7 +19,7 @@ All necessary datasets are contained in this repository, so no additional data d
 
    - https://archive.ics.uci.edu/ml/index.php
 
-The real HSI (Salinas A) was from the 2000 IEEE Data Fusion Contest data. This data is publically available via IEEE: 
+The real hyperspectral image data (Salinas A) was from the 2000 IEEE Data Fusion Contest data. This data is publically available via IEEE: 
 
    - http://www.ehu.eus/ccwintco/index.php?title=Hyperspectral_Remote_Sensing_Scenes
 
