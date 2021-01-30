@@ -1,15 +1,13 @@
-function [Lin, Lbtw] = linkage_measure(X,C)
-
-D = squareform(pdist(X)); % store distances beforehand
+function [Lin, Lbtw] = linkage_measure(C, D)
 
 K = length(unique(C));
 candidates_in = zeros(K,1);
-candidates_btw = zeros(K,K);
+candidates_btw = zeros(K,1);
 
 for k=1:K
-    candidates_in(k)  = max(D(C==k, C==k), [], 'all');
+    candidates_in(k) = max(D(C==k, C==k), [],'all');
     
-    cand_min = min(D(C==k,~(C==k)), [], 'all');
+    cand_min = min(D(C==k, C==k), [],'all');
     
     if isempty(cand_min)
         cand_min = NaN;

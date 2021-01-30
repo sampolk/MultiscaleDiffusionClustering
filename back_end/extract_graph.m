@@ -122,15 +122,18 @@ pi = diag(D)./sum(diag(D));
 
 % Calculate the eigendecomposition of P
 try 
-    
-    [EigenVecs,EigenVals] = eig(P);
-    [EigenVals,idx] = sort(diag(abs(EigenVals)), 'descend');
-    
+ 
+    % If the number of eigenvalues is specified, choose that.
     if isfield(Hyperparameters, 'NEigs') 
-        % If the number of eigenvalues is specified, choose that.
         n_eigs = Hyperparameters.NEigs;
+        [EigenVecs,EigenVals] = eigs(P, n_eigs);
+        [EigenVals,idx] = sort(diag(abs(EigenVals)), 'descend');
+           
     else
         % Otherwise, use the maximizer of the eigengap of P.
+
+        [EigenVecs,EigenVals] = eigs(P, 20);
+        [EigenVals,idx] = sort(diag(abs(EigenVals)), 'descend');
         [~,n_eigs] = max( abs(diff(EigenVals)));
         
         % Take care of fringe cases where we don't gather enough eigenvectors

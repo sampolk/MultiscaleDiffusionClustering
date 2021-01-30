@@ -23,7 +23,9 @@ for k = 1:max_spl
             n_K_nt = length(unique(Clusterings.K(find(and(Clusterings.K<length(X)/2, Clusterings.K>1)))));
             
             if length(intersect(unique(Clusterings.K), [2,3])) == 2 && n_K_nt==2
+                
                 flag = 1;
+
             end
 
         end

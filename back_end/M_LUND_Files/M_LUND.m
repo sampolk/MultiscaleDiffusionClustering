@@ -65,7 +65,7 @@ n = length(X);
 T = full(ceil(log( log(Hyperparameters.Tau*min(G.StationaryDist)/2)/log(G.EigenVals(2)))/log(Hyperparameters.Beta)));
 
 if isreal(T)
-    
+
     % ========================== Cluster analysis =========================
 
     % Extract Time Steps
@@ -76,28 +76,22 @@ if isreal(T)
     Kt = zeros(T+2,1);
     Dt = zeros(n,T+2);
     parfor i = 1:T+2
-        [Ct(:,i), Kt(i), Dt(:,i)] = LearningbyUnsupervisedNonlinearDiffusion(X, timesamples(i), G, p);
+        [Ct(:,i),Kt(i), Dt(:,i)] = LearningbyUnsupervisedNonlinearDiffusion(X, timesamples(i), G, p);
     end
 
     % ============================ VI analysis ============================
 
     J = find(and(Kt<n/2, Kt>1)); % Time samples during which a nontrivial clusering is extracted
     n_J = length(J);
-    V = zeros(n_J); % To be the VI(Cs, Ct) matrix for nontrivial clusterings
 
     if n_J > 0 % There is a nontrivial clustering of X.
-        notJ = setxor((1:T+2), J);
-        parfor i = 1:n_J
-            for j = 1:n_J
-                V(i,j) = VI(Ct(:,J(i)), Ct(:,J(j)));
-            end
-        end
-        % Calculate Total VI
-        VI_tot = zeros(T+2,1);
-        VI_tot(J) = sum(V);
-        VI_tot(notJ) = NaN; % Assign NaN Total VI for trivial clusterings.
+        [~,VI_tot,t] = totalVI_minimization(Ct, Kt);
+        TotalVI.Vector = VI_tot;
+        TotalVI.Minimizer_Idx = t;
     else
-        VI_tot = NaN;
+        TotalVI.Vector = zeros(T+2,1);
+        TotalVI.Vector(:) = NaN; 
+        TotalVI.Minimizer_Idx = NaN;
     end
 
     % Store results in structure "Clusterings"
@@ -105,7 +99,7 @@ if isreal(T)
     Clusterings.Hyperparameters = Hyperparameters;
     Clusterings.Labels = Ct;
     Clusterings.K = Kt;
-    Clusterings.TotalVI = VI_tot;
+    Clusterings.TotalVI = TotalVI;
     Clusterings.TimeSamples = timesamples;
     Clusterings.Density = p;
     Clusterings.Dt = Dt;

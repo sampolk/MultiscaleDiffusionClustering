@@ -124,7 +124,7 @@ if strcmp(data_name, 'Gaussians')
 elseif strcmp(data_name, 'Nonlinear')
     
     t3 = find(Clusterings.K == 3, 2,'first');
-    t2 = find(Clusterings.K == 2, 1,'first');
+    t2 = find(Clusterings.K == 2, 1,'last');
     ts = [t3(end), t2];
     
     if Clusterings.K(2) ==1 || Clusterings.K(2) >=n/2
@@ -243,8 +243,8 @@ elseif strcmp(data_name, 'Bottleneck')
     
     ts = zeros(n_nt_K,1);
     for k = 1:n_nt_K
-        tk = find(Clusterings.K == nt_K(k), 2,'first');
-        ts(k) = tk(2);
+        tk = find(Clusterings.K == nt_K(k), 1,'first');
+        ts(k) = tk;
     end
     ts = ts(end:-1:1);
     
@@ -359,19 +359,29 @@ elseif strcmp(data_name, 'Bottleneck')
 elseif strcmp(data_name, 'SalinasA')
     
     n = length(X);
+    M = 83;
+    N = 86;
     
-    nt_K = unique(Clusterings.K(and(Clusterings.K>2, Clusterings.K<n/2)));
+    load('salinasA_gt')
+    [~,GT_idx] = sort(reshape(salinasA_gt,M*N,1));
+    V = Clusterings.Graph.EigenVecs(GT_idx,:);
+    Vinv = pinv(V);
+    lambda = Clusterings.Graph.EigenVals;
+
+    
+    
+    nt_K = unique(Clusterings.K(and(Clusterings.K>=2, Clusterings.K<n/2)));
     n_nt_K = length(nt_K);
     
     ts = zeros(n_nt_K,1);
     for k = 1:n_nt_K
         tk = find(Clusterings.K == nt_K(k), 2,'first');
-        ts(k) = tk(2);
+        ts(k) = tk(1);
     end
     ts = ts(end:-1:1);
     
     if Clusterings.K(2) == 1 || Clusterings.K(2) >= n/2
-        ts = [2, ts];
+        ts = [2, ts'];
     end
     if Clusterings.K(end) == 1 || Clusterings.K(end) >= n/2
         ts = [ ts, length(Clusterings.K)];
@@ -400,7 +410,15 @@ elseif strcmp(data_name, 'SalinasA')
         subplot(n_rows, n_cols, plt_idx);
         Dt = diag(lambda.^Clusterings.TimeSamples(t));
         Pt = V*Dt*Vinv;
-        imagesc(real(log(Pt)))
+        imagesc(real(log10(Pt)))
+
+        title('$\log_{10}[P^t]$', 'interpreter', 'latex')
+        xticks([])
+        yticks([])
+        colorbar
+        pbaspect([1,1,1])
+        set(gca,'FontSize', 20, 'FontName', 'Times')
+
 
         title('$\log_{10}[P^t]$', 'interpreter', 'latex')
         xticks([])
