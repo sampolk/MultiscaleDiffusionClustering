@@ -12,7 +12,9 @@ This package can be used to generate experiments in the following articles:
 
 The following scripts (in the Experiments folder) generate the relevant experiments:
 
-   - M_LUND_demo.m implements M_LUND on synthetic data and the Salinas A hyperspectral image.
+   - SADataVisualization.m implements visualizes Salinas A hyperspectral image.
+   - M_LUND_demo.m implements M_LUND on synthetic data and the Salinas A hyperspectral image. One can compare against related algorithms on Salinas A using this demo as well.
+   - Benchmark.m compares the M-LUND algorithm against related algorithms on eleven benchmark datasets.
    - M_SRDL_demo.m compares M-SRDL against M-LUND on the Salinas A hyperspectral image.
    
 All necessary datasets are contained in this repository, so no additional data downloads are necessary. All benchmark datasets were obtained from the UCI Machine Learning Repository: 
@@ -23,7 +25,7 @@ The real hyperspectral image data (Salinas A) was from the 2000 IEEE Data Fusion
 
    - http://www.ehu.eus/ccwintco/index.php?title=Hyperspectral_Remote_Sensing_Scenes
 
-To run comparisons against MMS clustering, the following toolboxes, written by Zhijing Liu and Mauricio Barahona, must be added to one's path:
+If MMS clustering toolboxes are not in one's path, comparisons against MMS clustering will automatically be skipped. To run comparisons against MMS clustering, the following toolboxes, written by Zhijing Liu and Mauricio Barahona, must be added to one's path:
 
    - https://github.com/barahona-research-group/GraphBasedClustering
    - https://wwwf.imperial.ac.uk/~mpbara/Partition_Stability/
