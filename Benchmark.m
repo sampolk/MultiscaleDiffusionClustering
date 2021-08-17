@@ -70,7 +70,7 @@ for data_id = 1:11
     file_name = datasets{data_id};
     directory_name = erase(file_name, '.mat');
     load(file_name)
-    load(strcat(directory_name, '-HP.mat')) % loads hyperparameters   
+    load(strcat(directory_name, 'HyperparametersFinal.mat')) % loads hyperparameters   
     n = size(X,1);
     D = squareform(pdist(X));
     
@@ -106,6 +106,42 @@ for data_id = 1:11
     T3(data_id,1) = max(nmi_LUND);
     
     disp(strcat(directory_name, ' M-LUND run complete'))  
+    
+    % ----------------------------- SL-LUND -------------------------------
+    
+    t_idx = find(and(Clusterings.K>1, Clusterings.K<n/2), 1, 'first');
+    t = Clusterings.TimeSamples(t_idx);
+    T3(data_id, 6) = nmi(GT, LearningbyUnsupervisedNonlinearDiffusion(X, t, Graph, p, K_GT));
+
+    [C_Orig, C_MS] = SL_LUND(X, Clusterings, flag);
+    
+    % Construct Diffusion Distances
+    DiffusionMap = zeros(n,Clusterings.Hyperparameters.NEigs);
+    for k = 1:size(DiffusionMap,2)
+        DiffusionMap(:,k) = ((Clusterings.Graph.EigenVals(k)).^t).*Clusterings.Graph.EigenVecs(:,k);
+    end
+    DiffusionDistance = squareform(pdist(DiffusionMap));
+    
+    DtIn = NaN*zeros(size(C_MS,2)-1,1);
+    DtBtw = NaN*zeros(size(C_MS,2)-1,1);    
+    for j = 1:size(C_MS,2)-1
+        C = C_MS(:,j);
+        
+        candidates = zeros(length(unique(C)),2);
+        for k = 1:length(unique(C))
+            
+            candidates(k,1) = max(DiffusionDistance(C==k,C==k), [],'all');
+            candidates(k,2) = min(DiffusionDistance(C==k,~(C==k)), [],'all');            
+        
+        end
+        DtIn(j) = max(candidates(:,1));
+        DtBtw(j) = min(candidates(:,2));
+        
+    end
+    
+    [~,j] = min(DtIn./DtBtw);
+    T4(data_id, 5) = nmi(C_MS(:,j), GT);
+    
 
     % ------------------------------- MMS ---------------------------------
     
@@ -129,6 +165,12 @@ for data_id = 1:11
     end
     
     % ------------------------------- HSC ---------------------------------
+    
+
+    NEigs = Hyperparameters.NEigs;
+    Hyperparameters.NEigs = max(Hyperparameters.NEigs, K_GT);
+    % Extract graph and time steps
+    Graph = extract_graph(X, Hyperparameters);
 
     % Multiscale
     T_max = max(TimeSamples);
@@ -186,9 +228,11 @@ for data_id = 1:11
     
     disp(strcat(directory_name, ' analysis complete. ',num2str(floor(data_id*100/11)), '% done.'))
     
+    save(strcat(directory_name, 'HyperparametersFinal.mat'), 'Hyperparameters')
+    
 end
 %% 
-if sum(~isnan(T3(:,2))) == 11 
+if sum(or(isnan(T3(:,2)), T3(:,2)==0)) == 11  
     % MMS has not been added to path and is excluded from statistical 
     % comparisons
     idx_include = 1:11;
@@ -199,17 +243,17 @@ else
 end
 
 % statistical testing on Table 3
-p_vals3 = zeros(1,5);
-t_vals3 = zeros(1,5);
-for alg_id = 1:5
+p_vals3 = NaN*zeros(1,5);
+t_vals3 = NaN*zeros(1,5);
+for alg_id = setdiff(1:5,2)
     [~,p, ~, stats] = ttest(T3(idx_include,1), T3(idx_include,alg_id));
     p_vals3(alg_id) = p;
     t_vals3(alg_id) = stats.tstat;
 end
 
 % Convert Table 3 into presentable format
-T3 = [T3; mean(T3(idx_include,:)); p_vals3; t_vals3];
-cols = {'M-LUND', 'MMS', 'HSC', 'SLC', 'K-Means'};
+T3 = [T3; mean(T3(idx_include,:)); [0,p_vals3]; [Inf, t_vals3]];
+cols = {'M-LUND', 'MMS', 'HSC', 'SLC', 'K-Means', 'LUND'};
 rows = datasets';
 rows{12} = 'Average';
 rows{13} = 'p-value';
@@ -220,15 +264,15 @@ T3 = array2table(T3, 'VariableNames', cols, 'RowNames', rows);
 % statistical testing on Table 4
 p_vals4 = ones(1,4);
 t_vals4 = ones(1,4);
-for alg_id = 1:4
+for alg_id = setdiff(1:5,2)
     [~,p, ~, stats] = ttest(T4(:,1), T4(:,alg_id));
     p_vals4(alg_id) = p;
     t_vals4(alg_id) = stats.tstat;
 end
 
 % Convert Table 4 into presentable format
-T4 = [T4; mean(T4); p_vals4; t_vals4];
-cols = {'M-LUND', 'MMS', 'HSC', 'SLC'};
+T4 = [T4; mean(T4); [p_vals4]; [ t_vals4]];
+cols = {'M-LUND', 'MMS', 'HSC', 'SLC', 'SL-LUND'};
 rows = datasets';
 rows{12} = 'Average';
 rows{13} = 'p-value';

@@ -12,7 +12,7 @@ if T_max >= floor(max_size/10^8) % 1e-7 times the maximum size allocated in MATL
     
     Deltat = zeros(length(TimeSamples),1);
     Kt = zeros(length(TimeSamples),1);
-    parfor t = 1:length(TimeSamples)
+    for t = 1:length(TimeSamples)
         [Deltat(t), Kt(t)] = max(lambda(1:end-1).^TimeSamples(t) -lambda(2:end).^TimeSamples(t));
     end
     

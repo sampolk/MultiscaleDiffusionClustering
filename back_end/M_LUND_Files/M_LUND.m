@@ -75,7 +75,7 @@ if isreal(T)
     Ct = zeros(n,T+2);
     Kt = zeros(T+2,1);
     Dt = zeros(n,T+2);
-    parfor i = 1:T+2
+    for i = 1:T+2
         [Ct(:,i),Kt(i), Dt(:,i)] = LearningbyUnsupervisedNonlinearDiffusion(X, timesamples(i), G, p);
     end
 

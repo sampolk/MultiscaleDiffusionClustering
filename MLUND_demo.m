@@ -27,7 +27,7 @@ profile on;
 
 %% Choose the dataset
 
-prompt = 'Which dataset? \n 1) 3D Gaussians \n 2) 2D Nonlinear \n 3) 2D Bottleneck \n 4) Salinas A HSI\n';
+prompt = 'Which dataset? \n 1) 3D Gaussians \n 2) 2D Nonlinear \n 3) 2D Bottleneck \n 4) 2D Manifold Data \n 5) Salinas A HSI\n';
 DataSelected = input(prompt);
 
 if DataSelected == 1
@@ -59,6 +59,16 @@ elseif DataSelected == 3
     disp('Dataset generated')
     
 elseif DataSelected == 4
+    
+    disp('Finding suitable sample...') 
+    [X,Y] = multimodal_sample();
+    compare_on = 0;
+    
+    data_name = 'Manifold';
+    load('manifold-HP.mat')
+    disp('Dataset generated')
+    
+elseif DataSelected == 5
     
     [X,Y] = extract_salinasA();
     data_name = 'SalinasA';
@@ -139,8 +149,9 @@ end
 
 Clusterings = M_LUND(X, Hyperparameters);
 
+%% 
 if compare_on
-    [C_MMS, C_HSC, C_SLC] = make_comparisons(X, Clusterings, mms_on, plot_on);
+    [C_MMS, C_HSC, C_SLC, C_SLLUND] = make_comparisons(X, Clusterings, mms_on, plot_on);
 end
 
 if save_on 
@@ -151,6 +162,8 @@ if save_on
     end
 end
 %%
+
+close all 
 if plot_on
     results_plot = plot_results(X, Clusterings, data_name, sc_on);
 end

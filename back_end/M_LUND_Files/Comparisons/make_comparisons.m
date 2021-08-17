@@ -1,4 +1,4 @@
-function [C_MMS, C_HSC, C_SLC] = make_comparisons(X, C_MLUND, mms_in, plot_on, M,N)
+function [C_MMS, C_HSC, C_SLC, C_SLLUND] = make_comparisons(X, C_MLUND, mms_in, plot_on)
 
 M = 83;
 N = 86;
@@ -42,6 +42,8 @@ for K = 1:5
 end
 disp('SLC Clustering run complete.')
 
+% SL-LUND
+[~, C_SLLUND] = SL_LUND(X, C_MLUND);
 
 if plot_on
     
@@ -51,7 +53,7 @@ if plot_on
     i2 = find(C_MLUND.K == 2, 1,'first');
     
     % M-LUND plots
-    subplot(2,3,1)
+    subplot(2,4,1)
     imagesc(reshape(C_MLUND.Labels(:,i5),M,N))   
     title(strcat('M-LUND Clustering of Salinas A, K=5, log2(t)=',num2str(i5-2)))
     pbaspect([1,1,1])
@@ -59,7 +61,7 @@ if plot_on
     xticks([])
     yticks([])    
     
-    subplot(2,3,4)
+    subplot(2,4,5)
     imagesc(reshape(C_MLUND.Labels(:,i2),M,N))    
     title(strcat('M-LUND Clustering of Salinas A, K=2, log2(t)=',num2str(i2-2)))
     pbaspect([1,1,1])
@@ -71,7 +73,7 @@ if plot_on
     i2 = find(C_HSC.K == 2, 1,'first');
     
     % HSC plots
-    subplot(2,3,2)
+    subplot(2,4,2)
     imagesc(reshape(C_HSC.Labels(:,i5),M,N))
     title(strcat('HSC Clustering of Salinas A, K=5, log2(t)=',num2str(log2(t_vals(i5,1)))))
     pbaspect([1,1,1])
@@ -79,7 +81,7 @@ if plot_on
     xticks([])
     yticks([])    
     
-    subplot(2,3,5)
+    subplot(2,4,6)
     imagesc(reshape(C_HSC.Labels(:,i2),M,N))    
     title(strcat('HSC Clustering of Salinas A, K=2, log2(t)=',num2str(log2(t_vals(i2,1)))))
     pbaspect([1,1,1])
@@ -88,7 +90,7 @@ if plot_on
     yticks([])        
     
     % SLC plots
-    subplot(2,3,3)
+    subplot(2,4,3)
     imagesc(reshape(C_SLC(:,5),M,N))    
     title(strcat('SLC Clustering of Salinas A, K=5'))
 
@@ -97,15 +99,33 @@ if plot_on
     xticks([])
     yticks([])    
     
-    subplot(2,3,6)
+    subplot(2,4,7)
     imagesc(reshape(C_SLC(:,2),M,N))   
     title(strcat('SLC Clustering of Salinas A, K=2'))
     pbaspect([1,1,1])
     set(gca,'FontName', 'Times', 'FontSize', 12)
     xticks([])
     yticks([])   
-    disp('MLUND vs. HSC vs. SLC plot complete.')
+    disp('M-LUND vs. HSC vs. SLC plot complete.')
 
+    % SLC plots
+    subplot(2,4,4)
+    imagesc(reshape(C_SLLUND(:,1),M,N))    
+    title(strcat('SL-LUND Clustering of Salinas A, K=5'))
+
+    pbaspect([1,1,1])
+    set(gca,'FontName', 'Times', 'FontSize', 12)
+    xticks([])
+    yticks([])    
+    
+    subplot(2,4,8)
+    imagesc(reshape(C_SLLUND(:,4),M,N))   
+    title(strcat('SL-LUND Clustering of Salinas A, K=2'))
+    pbaspect([1,1,1])
+    set(gca,'FontName', 'Times', 'FontSize', 12)
+    xticks([])
+    yticks([])   
+    disp('M-LUND vs. HSC vs. SLC plot complete.')
     
     if mms_in
         

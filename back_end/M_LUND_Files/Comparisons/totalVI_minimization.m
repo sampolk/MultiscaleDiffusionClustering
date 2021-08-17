@@ -10,7 +10,7 @@ VI_tot = zeros(n_samp,1);
 
 if n_J > 0 % There is a nontrivial clustering of X.
     for i = 1:n_J
-        parfor j = 1:n_J
+        for j = 1:n_J
             V(i,j) = VI(Ct(:,J(i)), Ct(:,J(j)));
         end
     end

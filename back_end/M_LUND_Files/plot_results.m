@@ -356,6 +356,128 @@ elseif strcmp(data_name, 'Bottleneck')
 
     end    
     
+elseif strcmp(data_name, 'Manifold')
+    
+    n = length(X);
+    
+    nt_K = unique(Clusterings.K(and(Clusterings.K>=2, Clusterings.K<n/2)));
+    n_nt_K = length(nt_K);
+    
+    ts = zeros(n_nt_K,1);
+    for k = 1:n_nt_K
+        tk = find(Clusterings.K == nt_K(k), 1,'first');
+        ts(k) = tk;
+    end
+    ts = ts(end:-1:1);
+    
+    if Clusterings.K(2) == 1 || Clusterings.K(2) >= n/2
+        ts = [2; ts];
+    end
+    if Clusterings.K(end) == 1 || Clusterings.K(end) >= n/2
+        ts = [ ts; length(Clusterings.K)];
+    end    
+    
+    n_rows = length(ts);
+    plt_idx = 0;    
+    
+    for row = 1:n_rows
+        
+        t = ts(row);
+        
+        % Plot cluster assignments at time t
+        plt_idx = plt_idx+1;
+        subplot(n_rows, n_cols, plt_idx);
+        scatter(X(:,1), X(:,2), 36, Clusterings.Labels(:,ts(row)))
+        pbaspect([1,1,1])
+        title('LUND Assignments', 'interpreter', 'latex')
+        xticks([])
+        yticks([])
+        pbaspect([1,1,1])
+        box on 
+        set(gca,'FontSize', 20, 'FontName', 'Times')
+
+        % Plot transition matrix at time t
+        plt_idx = plt_idx+1;
+        subplot(n_rows, n_cols, plt_idx);
+        P = Clusterings.Graph.P;
+        imagesc(real(log(P^Clusterings.TimeSamples(t))))
+        title('$\log_{10}[P^t]$', 'interpreter', 'latex')
+        xticks([])
+        yticks([])
+        colorbar
+        pbaspect([1,1,1])
+        set(gca,'FontSize', 20, 'FontName', 'Times')
+
+
+        % Plot eigenvalue decay at time t
+        plt_idx = plt_idx+1;
+        subplot(n_rows, n_cols, plt_idx);
+        plot(Clusterings.Graph.EigenVals.^Clusterings.TimeSamples(t), 'LineWidth', 2)
+        title('$\lambda_k^t$', 'interpreter', 'latex')
+        xlabel('$k$', 'interpreter', 'latex')
+        yticks(0:0.1:1)
+        ylim([0,1])
+        xticks(1:10)
+        xtickangle(0)
+        pbaspect([1,1,1])
+        set(gca,'FontSize', 20, 'FontName', 'Times')
+        
+        % Plot Dt(x) with modes
+        plt_idx = plt_idx+1;
+        subplot(n_rows, n_cols, plt_idx);
+        scatter(X(:,1), X(:,2), 36, log10(Clusterings.Dt(:,ts(row))))
+        colorbar
+        [~,m_sorting] = sort(Clusterings.Dt(:,ts(row)), 'descend');
+        hold on
+        scatter(X(m_sorting(1:Clusterings.K(ts(row))),1), X(m_sorting(1:Clusterings.K(ts(row))),2), 72, 'r*')
+        hold off
+        title('$\log_{10}[\mathcal{D}_t(x)]$, With Colored Modes', 'interpreter', 'latex')
+        xticks([])
+        yticks([])
+        pbaspect([1,1,1])
+        box on
+        set(gca,'FontName', 'Times', 'FontSize', 20)
+        colorbar
+        
+        if sc_on
+           
+            plt_idx = plt_idx+1;
+            subplot(n_rows, n_cols, plt_idx);
+            
+            [delta, lambda, kappa] = StochasticComplement(Clusterings.Graph.P, Clusterings.Labels(:,t));
+
+            for i = 1:length(epsilons)
+                epsilon = epsilons(i);
+                top = log(2*kappa)-log(epsilon);
+                bottom = -log(lambda);
+                lb(i) = top/bottom;
+                ub(i) = epsilon/(2*delta);
+            end
+            title('Bounds of $\mathcal{I}_\epsilon^{(\ell)}$', 'interpreter', 'latex')
+            loglog(epsilons, lb, 'LineWidth', 2)
+            hold on
+            loglog(epsilons, ub, 'LineWidth', 2)
+            hold off
+            ylim([min([lb,ub]')/10, max([lb,ub]')*10])
+            l = ceil(log10(min([lb,ub]')));
+            u = floor(log10(max([lb,ub]')));
+            yticks(10.^(-12:2:8))
+            pbaspect([1,1,1])
+            xlim([min(epsilons) , max(epsilons)])
+            legend({'$\frac{\ln(2\kappa^{(\ell)}/\epsilon)}{\ln(1/|\lambda_{K_\ell+1}^{(\ell)}|)}$', '$\frac{\epsilon}{2\delta^{(\ell)}}$'}, 'interpreter', 'latex', 'location', 'southeast')
+            xlabel('$\epsilon$', 'interpreter', 'latex')
+
+            xtickangle(45)
+            title('Lower and Upper Bounds of $\mathcal{I}_\epsilon^{(\ell)}$ as a function of $\epsilon$', 'interpreter', 'latex')
+
+            set(gca,'FontSize', 20, 'FontName', 'Times')
+
+            box on
+
+        end
+
+    end       
+    
 elseif strcmp(data_name, 'SalinasA')
     
     n = length(X);
