@@ -41,4 +41,4 @@ Users are free to modify the Multiscale Diffusion Clustering toolbox as they wis
 
 Please write with any questions: samuel.polk@tufts.edu
 
-(c) Copyright Sam L. Polk, Tufts University, 2021.
+(c) Copyright Sam L. Polk, Tufts University, 2022.
