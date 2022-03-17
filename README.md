@@ -9,7 +9,7 @@ This toolbox allows the implementation of the following diffusion-based clusteri
 
 This package can be used to generate experiments in the following articles:
 
-   - Murphy, James M and Polk, Sam L. "A Multiscale Environment for Learning By Diffusion." arXiv preprint, arXiv:2102.00500.
+   - Murphy, J. M., & Polk, S. L. (2022). A multiscale environment for learning by diffusion. Applied and Computational Harmonic Analysis, 57, 58-100.
    - Polk, Sam L. and Murphy James M. "Multiscale Spectral-Spatial Diffusion Geometry for Hyperspectral Image Clustering." To Appear In The Proceedings of IEEE IGARSS 2021 (2021).
 
 The following scripts (in the Experiments folder) generate the relevant experiments:
