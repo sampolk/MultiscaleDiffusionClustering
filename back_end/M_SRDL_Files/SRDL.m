@@ -104,18 +104,8 @@ else
     N = Hyperparameters.SpatialParams.ImageSize(2);  
     R = Hyperparameters.SpatialParams.SpatialRadius;  
     [I,J]=find(sum(X,3)~=0); 
-    
+      
     % Labeling Pass 1
-    for j = 1:n
-        i = l_sorting(j);
-        if C(i)==0 % unlabeled point
-            candidates = find(and(p>=p(i), C>0)); % Labeled points of higher density.
-            [~,temp_idx] = min(DiffusionDistance(i, candidates));
-            C(i) = C(candidates(temp_idx));
-        end
-    end
-    
-    % Labeling Pass 2
     for j=1:n
         
         i = l_sorting(j);
@@ -124,14 +114,7 @@ else
             candidates = find(and(p>=p(i), C>0)); % Labeled points of higher density.
             [~,temp_idx] = min(DiffusionDistance(i, candidates)); % index of the Dt-nearest neighbor of higher density that is already labeled. 
             C(i) = C(candidates(temp_idx));
-            
-            % Special case when multiple points have equal density
-            if C(i) == 0
-                temp = find(Labels>0); % indices of labeled points
-                NN = knnsearch(X(temp,:),X(i,:)); 
-                C(i)=C(temp(NN));% Assign label of nearest Euclidean distance-nearest neighbor that is already labeled.
-            end
-            
+
             % Check spatial consensus
             try
                 LabelsMatrix=sparse(I(l_sorting(1:j)),J(l_sorting(1:j)),C(l_sorting(1:j)),M,N);
@@ -145,7 +128,6 @@ else
         end
     end
 
-
     % Second pass
     for j=1:n
         i = l_sorting(j);
@@ -155,13 +137,6 @@ else
             candidates = find(and(p>=p(i), C>0)); % Labeled points of higher density.
             [~,temp_idx] = min(DiffusionDistance(i, candidates)); % index of the Dt-nearest neighbor of higher density that is already labeled. 
             C(i) = C(candidates(temp_idx));
-            
-            % Special case when multiple points have equal density
-            if C(i) == 0
-                temp = find(Labels>0); % indices of labeled points
-                NN = knnsearch(X(temp,:),X(i,:)); 
-                C(i)=C(temp(NN));% Assign label of nearest Euclidean distance-nearest neighbor that is already labeled.
-            end
             
             % Check spatial consensus
             try
