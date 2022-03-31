@@ -103,7 +103,7 @@ else
     M = Hyperparameters.SpatialParams.ImageSize(1);
     N = Hyperparameters.SpatialParams.ImageSize(2);  
     R = Hyperparameters.SpatialParams.SpatialRadius;  
-    [I,J]=find(sum(X,3)~=0); 
+    [I,J]=find(sum(reshape(X,M,N,[]),3)~=0);
       
     % Labeling Pass 1
     for j=1:n
