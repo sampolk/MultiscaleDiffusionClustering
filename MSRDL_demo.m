@@ -43,6 +43,9 @@ end
 data_name = 'SalinasA';
 load('salinasA-SRDL-HP.mat')
 
+Hyperparameters.SpatialParams.GraphSpatialRadius=12;
+Hyperparameters.SpatialParams.ConsensusSpatialRadius=1;
+
 p = KDE(X,Hyperparameters);
 G_SpatialRegularization = extract_graph(X, Hyperparameters);
 Clusterings_SRDL = M_SRDL(X, Hyperparameters, G_SpatialRegularization, p);
@@ -65,7 +68,7 @@ end
 
 %% 
 
-[~,t] = min(Clusterings_LUND.TotalVI);
+[~,t] = min(Clusterings_LUND.TotalVI.Vector);
 [NMI_MLUND] = nmi(Clusterings_LUND.Labels(:,t), Y);
 
 disp('The optimal M-LUND clustering returned an NMI of')

@@ -52,7 +52,7 @@ if isfield(Hyperparameters, 'SpatialParams')
 
     % If spatial information is included in hyperparameters structure, we
     % incorporate that into the diffusion process.
-    R = Hyperparameters.SpatialParams.SpatialRadius;
+    R = Hyperparameters.SpatialParams.GraphSpatialRadius;
     M = Hyperparameters.SpatialParams.ImageSize(1);
     N = Hyperparameters.SpatialParams.ImageSize(2);
     

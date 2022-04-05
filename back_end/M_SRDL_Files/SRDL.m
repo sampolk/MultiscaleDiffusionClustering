@@ -85,7 +85,7 @@ Dt = rt.*p;
 if isfield(Hyperparameters, 'K_known')
     K = K_known;
 else
-    [~, K] = max(Dt(m_sorting(1:n-1))./Dt(m_sorting(2:n)));
+    [~, K] = max(Dt(m_sorting(1:n-10))./Dt(m_sorting(2:n-9))); % avoid some trivial clusterings by deleting the last 9 entries of the sorted values
 end
 
 if K == 1
@@ -97,59 +97,71 @@ else
 
     % Label non-modal points according to the label of their Dt-nearest
     % neighbor of higher density that is already labeled.
-    [~,l_sorting] = sort(p,'descend');
+    [~,idx] = sort(p,'descend');
     
     % Define spatial consensus variables
     M = Hyperparameters.SpatialParams.ImageSize(1);
     N = Hyperparameters.SpatialParams.ImageSize(2);  
-    R = Hyperparameters.SpatialParams.SpatialRadius;  
-    [I,J]=find(sum(reshape(X,M,N,[]),3)~=0);
-      
-    % Labeling Pass 1
-    for j=1:n
-        
-        i = l_sorting(j);
-        if C(i)==0
-            
-            candidates = find(and(p>=p(i), C>0)); % Labeled points of higher density.
-            [~,temp_idx] = min(DiffusionDistance(i, candidates)); % index of the Dt-nearest neighbor of higher density that is already labeled. 
-            C(i) = C(candidates(temp_idx));
+    WindowSize = Hyperparameters.SpatialParams.ConsensusSpatialRadius;  
 
-            % Check spatial consensus
-            try
-                LabelsMatrix=sparse(I(l_sorting(1:j)),J(l_sorting(1:j)),C(l_sorting(1:j)),M,N);
-                SpatialConsensusLabel=SpatialConsensus(LabelsMatrix,i,M,N,I,J,R);
-                if ~(SpatialConsensusLabel==C(i)) && (SpatialConsensusLabel>0)
-                    C(l_sorting(j))=0; % reset if spatial consensus label disagrees with DL label
-                end
-            catch
-                keyboard
+    if WindowSize == 1    
+        % Equivalent to labeling pixels according to their Dt-nearest
+        % neighbor of higher density that is already labeled
+        for j = 1:n
+            i = idx(j);
+            if C(i)==0 % unlabeled point
+                candidates = find(and(p>=p(i), C>0)); % Labeled points of higher density.
+                [~,temp_idx] = min(DiffusionDistance(i, candidates));
+                C(i) = C(candidates(temp_idx));
             end
         end
-    end
-
-    % Second pass
-    for j=1:n
-        i = l_sorting(j);
-        
-        if C(i)==0
-            
-            candidates = find(and(p>=p(i), C>0)); % Labeled points of higher density.
-            [~,temp_idx] = min(DiffusionDistance(i, candidates)); % index of the Dt-nearest neighbor of higher density that is already labeled. 
-            C(i) = C(candidates(temp_idx));
-            
-            % Check spatial consensus
-            try
-                LabelsMatrix=sparse(I(l_sorting(1:j)),J(l_sorting(1:j)),C(l_sorting(1:j)),M,N);
-                [SpatialConsensusLabel,ConsensusFrac]=SpatialConsensus(LabelsMatrix,i,M,N,I,J,R);
-                if ConsensusFrac>.5
-                    C(i)=SpatialConsensusLabel;
-                end
-            catch
-                keyboard
-            end
-        end
-    end
+    else
+        %We incorporate spatial consensus in this case. 
+        [I,J]=find(sum(reshape(X,M,N,[]),3)~=0); % indices of each pixel
     
-end
+        % First pass
+        for j=1:length(C)
+            if C(idx(j))==0
+    
+                % Find diffusion distance nearest neighbor of higher density
+                % that is already labeled
+                [~,NN]=min(DiffusionDistance(idx(j),idx(1:j-1)));
+                C(idx(j))=C(idx(NN));
+    
+                % Construct spatial consensus label
+                neighbors = FindNeighbors([I(idx(j)),J(idx(j))],WindowSize,M,N)'; % indices of spatial neighbors of X(idx(j),:).
+                neighboringPixels = sub2ind([M,N], neighbors(:,1), neighbors(:,2)); % Convert to indices 
+                labeledNeighboringPixels = intersect(neighboringPixels, idx(1:j-1)); % contains the indices of neighboring pixels that are already labeled
+    
+                if ~isempty(labeledNeighboringPixels) % True if no spatial consensus label. 
+                    SpatialConsensusLabel = mode(C(labeledNeighboringPixels));
+                    if ~(SpatialConsensusLabel  == C(idx(j)))
+                        C(idx(j)) = 0;
+                    end
+                end
+            end
+        end
+            
+        % Second pass
+        for j=1:length(C)
+            if C(idx(j))==0
+                % Find diffusion distance nearest neighbor of higher density
+                % that is already labeled
+                [~,NN]=min(DiffusionDistance(idx(j),idx(1:j-1)));
+                C(idx(j))=C(idx(NN)); 
+    
+                % Construct spatial consensus label
+                neighbors = FindNeighbors([I(idx(j)),J(idx(j))],WindowSize,M,N)'; % indices of spatial neighbors of X(idx(j),:).
+                neighboringPixels = sub2ind([M,N], neighbors(:,1), neighbors(:,2)); % Convert to indices 
+                labeledNeighboringPixels = intersect(neighboringPixels, find(C>0)); % contains the indices of neighboring pixels that are already labeled
+    
+                if ~isempty(labeledNeighboringPixels) % True if a spatial consensus label exists for X(idx(j),:).
+                    [SpatialConsensusLabel, SpatialConsensusFrequency] = mode(C(labeledNeighboringPixels));  
+                    if SpatialConsensusFrequency>0.5*length(labeledNeighboringPixels) % true if the majority of labeled pixels neighboring X(idx(j),:) have label = SpatialConsensusFrequency
+                        C(idx(j))=SpatialConsensusLabel;
+                    end 
+                end
+            end
+        end
+    end
 end
