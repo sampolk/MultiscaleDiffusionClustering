@@ -37,7 +37,7 @@ Users are free to modify the Multiscale Diffusion Clustering toolbox as they wis
    - Maggioni, Mauro, and James M. Murphy. "Learning by Unsupervised Nonlinear Diffusion." Journal of Machine Learning Research 20.160 (2019): 1-56.
    - Murphy, James M., and Mauro Maggioni. "Spectral-spatial diffusion geometry for hyperspectral image clustering." IEEE Geoscience and Remote Sensing Letters (2019).
    - Murphy, James M., & Polk, Sam L. (2022). A multiscale environment for learning by diffusion. Applied and Computational Harmonic Analysis, 57, 58-100.
-   - Polk, Sam L. and Murphy James M. "Multiscale Spectral-Spatial Diffusion Geometry for Hyperspectral Image Clustering." To Appear In The Proceedings of IEEE IGARSS 2021 (2021).
+   - Polk, Sam L. and Murphy James M. "Multiscale Spectral-Spatial Diffusion Geometry for Hyperspectral Image Clustering." Proceedings of IEEE IGARSS 2021 (2021): 4688-4691.
 
 Please write with any questions: samuel.polk@tufts.edu
 
