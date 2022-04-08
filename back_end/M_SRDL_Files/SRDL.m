@@ -104,7 +104,7 @@ else
     N = Hyperparameters.SpatialParams.ImageSize(2);  
     WindowSize = Hyperparameters.SpatialParams.ConsensusSpatialRadius;  
 
-    if WindowSize == 1    
+    if WindowSize == 0   
         % Equivalent to labeling pixels according to their Dt-nearest
         % neighbor of higher density that is already labeled
         for j = 1:n
